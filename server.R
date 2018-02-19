@@ -22,7 +22,7 @@ output$plt = renderPlot({
     end_date = as.character(input$end_date)
     if(input$seriousness == 0) {seriousness = ""} #no seriousness filter statement if keep all 
     else{seriousness = paste0('+AND+serious:', as.character(input$seriousness))} # 1 for serious, 2 for non serious according to API
-    data_url = paste0('http://api.fda.gov/drug/event.json?search=(patient.drug.medicinalproduct:',api,
+    data_url = paste0('https://api.fda.gov/drug/event.json?search=(patient.drug.medicinalproduct:',api,
                       '+OR+patient.drug.openfda.generic_name:',api,'+OR+patient.drug.openfda.substance_name:',api,
                       '+OR+patient.drug.openfda.brand_name:',api,')',seriousness,'+AND+receivedate:[',start_date,
                       '+TO+',end_date,']&count=patient.reaction.reactionmeddrapt.exact&limit=1000')
@@ -49,7 +49,7 @@ output$plt = renderPlot({
         output$message = renderText({'5) Download the data:'})
         plt = ggplot(data=df_subset, aes(x=reorder(Event,Count,FUN=function(x) -x), y=Count))+
         geom_bar(stat='identity', colour='white', fill='navyblue', alpha = 0.6, width=0.6)+
-        geom_text(data=df_subset, aes(x=Event, y=Count*1.1, ymax=Count*1.15,  label=Count), size=4,
+        geom_text(data=df_subset, aes(x=Event, y=Count*1.1, label=Count), size=4,
                 position = position_dodge(width=1)) +
         xlab('')+ylab('COUNT\n')+
         ggtitle(paste0('TOP 10 MOST FREQUENT ADVERSE EVENTS FOR ', toupper(raw_api), '\n\n'))+
